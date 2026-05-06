@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Scan QR Absensi</title>
+
+<link rel="stylesheet" href="/css/output.css">
+
+<style>
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f2faf4;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+.btn-back {
+  color: #0ea44d;
+  font-weight: 600;
+}
+
+.info-box {
+  background: #ecfdf3;
+  border: 1px solid #b7ebc6;
+  border-radius: 12px;
+  padding: 14px;
+}
+</style>
+</head>
+
+<body class="p-5 flex flex-col items-center">
+
+<!-- HEADER -->
+<h2 class="text-2xl font-bold text-[#0ea44d] mb-2 text-center">
+  📷 Scan QR Absensi
+</h2>
+
+<p class="text-sm text-gray-500 mb-5 text-center">
+  Scan QR dari dosen untuk melakukan absensi
+</p>
+
+<!-- CARD -->
+<div class="card w-full max-w-md">
+
+  <!-- INFO MAHASISWA -->
+  <% if (typeof student !== "undefined") { %>
+
+  <div class="info-box mb-4">
+    <p class="text-sm text-gray-500">Mahasiswa Login</p>
+
+    <h3 class="font-bold text-lg text-[#0ea44d]">
+      <%= student.name %>
+    </h3>
+
+    <p class="text-sm text-gray-600">
+      NIM: <%= student.nim %>
+    </p>
+
+    <p class="text-sm text-gray-600">
+      Kelas: <%= student.class || "-" %>
+    </p>
+  </div>
+
+  <% } %>
+
+  <!-- SCANNER -->
+  <div id="reader" class="w-full rounded-lg overflow-hidden"></div>
+
+  <p class="text-xs text-center text-gray-400 mt-3">
+    Arahkan kamera ke QR Code dosen
+  </p>
+
+</div>
+
+<!-- BACK -->
+<a href="/dashboard/mahasiswa"
+   class="btn-back mt-5">
+   ← Kembali ke Dashboard
+</a>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<script>
+
+function startScanner() {
+
+  const scanner = new Html5Qrcode("reader");
+
+  scanner.start(
+    { facingMode: "environment" },
+
+    {
+      fps: 10,
+      qrbox: 250
+    },
+
+    (decodedText) => {
+
+      console.log("✅ QR berhasil:", decodedText);
+
+      // ambil session id dari URL QR
+      const parts = decodedText.split("/");
+      const sessionId = parts[parts.length - 1];
+
+      // redirect otomatis ke session scan
+      window.location.href = `/scan/${sessionId}`;
+
+      scanner.stop();
+    },
+
+    (err) => {
+      // ignore scan fail
+    }
+
+  ).catch((err) => {
+
+    console.log(err);
+
+    alert("❌ Kamera gagal dibuka. Izinkan akses kamera browser.");
+
+  });
+
+}
+
+startScanner();
+
+</script>
+
+</body>
+</html>

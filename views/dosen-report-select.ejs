@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Pilih Laporan</title>
+<link rel="stylesheet" href="/css/output.css">
+</head>
+
+<body class="bg-gray-50 p-6 font-sans">
+
+<h2 class="text-xl font-bold mb-3">📊 Laporan Kehadiran</h2>
+<p class="text-sm text-gray-600 mb-4">Silakan pilih mata kuliah untuk melihat laporan lengkap 👇</p>
+
+<form action="/dashboard/dosen/report/go" method="GET" class="flex gap-3">
+  <select name="subjectId" class="border p-2 rounded w-64">
+    <% subjects.forEach(s => { %>
+      <option value="<%= s.id %>"><%= s.name %> — <%= s.code %></option>
+    <% }) %>
+  </select>
+
+  <button class="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700">
+    Lihat Laporan
+  </button>
+</form>
+
+</body>
+</html>

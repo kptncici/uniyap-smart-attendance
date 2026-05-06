@@ -1,0 +1,232 @@
+<div class="bg-white shadow-md rounded-xl p-6">
+
+  <!-- 🔖 HEADER -->
+  <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-5">
+
+    <h2 class="text-2xl font-semibold text-[#00b14f] flex items-center gap-2">
+      📑 Laporan Kehadiran
+    </h2>
+
+    <!-- 📅 FILTER -->
+    <form
+      action="/dashboard/admin/report"
+      method="GET"
+      class="flex flex-wrap items-center gap-3"
+    >
+
+      <!-- DARI -->
+      <div class="flex items-center gap-2">
+        <label class="text-sm text-gray-600">
+          Dari:
+        </label>
+
+        <input
+          type="date"
+          name="start"
+          value="<%= typeof start !== 'undefined' ? start : '' %>"
+          class="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#00b14f] outline-none"
+        />
+      </div>
+
+      <!-- SAMPAI -->
+      <div class="flex items-center gap-2">
+        <label class="text-sm text-gray-600">
+          Sampai:
+        </label>
+
+        <input
+          type="date"
+          name="end"
+          value="<%= typeof end !== 'undefined' ? end : '' %>"
+          class="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#00b14f] outline-none"
+        />
+      </div>
+
+      <!-- SEARCH -->
+      <div>
+
+        <input
+          type="text"
+          name="search"
+          value="<%= typeof search !== 'undefined' ? search : '' %>"
+          placeholder="Cari nama mahasiswa..."
+          class="border rounded-lg px-3 py-2 text-sm w-56 focus:ring-2 focus:ring-[#00b14f] outline-none"
+        />
+
+      </div>
+
+      <!-- FILTER BUTTON -->
+      <button
+        type="submit"
+        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all duration-300"
+      >
+        🔍 Cari
+      </button>
+
+      <!-- EXPORT -->
+      <a
+        href="/dashboard/admin/report/export?start=<%= start || '' %>&end=<%= end || '' %>&search=<%= search || '' %>"
+        class="bg-[#00b14f] hover:bg-[#009743] text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all duration-300 inline-block"
+      >
+        📤 Export Excel
+      </a>
+
+    </form>
+
+  </div>
+
+  <!-- ✅ NOTIFIKASI -->
+  <% if (typeof success !== "undefined") { %>
+
+    <div
+      id="notif-success"
+      class="bg-emerald-50 text-emerald-700 p-3 rounded mb-4 flex items-center gap-2 transition-all duration-500"
+    >
+      ✅ <%= decodeURIComponent(success) %>
+    </div>
+
+  <% } else if (typeof error !== "undefined") { %>
+
+    <div
+      id="notif-error"
+      class="bg-red-50 text-red-700 p-3 rounded mb-4 flex items-center gap-2 transition-all duration-500"
+    >
+      ❌ <%= decodeURIComponent(error) %>
+    </div>
+
+  <% } %>
+
+  <!-- 📊 TABLE -->
+  <div class="overflow-x-auto rounded-lg border border-gray-100">
+
+    <table class="w-full border-collapse text-sm">
+
+      <thead class="bg-emerald-50 border-b-2 border-[#00b14f]">
+
+        <tr>
+
+          <th class="text-left p-4 font-semibold">
+            Nama Mahasiswa
+          </th>
+
+          <th class="text-left p-4 font-semibold">
+            Mata Kuliah
+          </th>
+
+          <th class="text-left p-4 font-semibold">
+            Tanggal Kehadiran
+          </th>
+
+          <th class="text-left p-4 font-semibold">
+            Status
+          </th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <% if (attendances && attendances.length > 0) { %>
+
+          <% attendances.forEach((a) => { %>
+
+            <tr class="border-b hover:bg-gray-50 transition">
+
+              <!-- MAHASISWA -->
+              <td class="p-4">
+                <%= a.studentName || "-" %>
+              </td>
+
+              <!-- MATKUL -->
+              <td class="p-4">
+                <%= a.subjectName || "-" %>
+              </td>
+
+              <!-- TANGGAL -->
+              <td class="p-4">
+
+                <%= new Date(a.date).toLocaleDateString(
+                  "id-ID",
+                  {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric"
+                  }
+                ) %>
+
+              </td>
+
+              <!-- STATUS -->
+              <td class="p-4">
+
+                <span class="
+                  px-3 py-1 rounded-full text-xs font-semibold
+                  <%= a.status === 'Hadir'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-red-100 text-red-600' %>
+                ">
+
+                  <%= a.status %>
+
+                </span>
+
+              </td>
+
+            </tr>
+
+          <% }) %>
+
+        <% } else { %>
+
+          <tr>
+
+            <td
+              colspan="4"
+              class="p-6 text-center text-gray-500 italic"
+            >
+              Belum ada data laporan.
+            </td>
+
+          </tr>
+
+        <% } %>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<!-- 🎯 AUTO HIDE NOTIF -->
+<script>
+
+setTimeout(() => {
+
+  const successBox =
+    document.getElementById("notif-success");
+
+  const errorBox =
+    document.getElementById("notif-error");
+
+  if (successBox)
+    successBox.style.opacity = "0";
+
+  if (errorBox)
+    errorBox.style.opacity = "0";
+
+  setTimeout(() => {
+
+    if (successBox)
+      successBox.remove();
+
+    if (errorBox)
+      errorBox.remove();
+
+  }, 500);
+
+}, 3000);
+
+</script>

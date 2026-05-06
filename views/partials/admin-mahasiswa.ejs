@@ -1,0 +1,107 @@
+<div class="bg-white rounded-xl p-6 shadow-sm">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+    <h2 class="text-xl font-semibold text-[#00b14f] flex items-center gap-2">🎓 Data Mahasiswa</h2>
+
+    <div class="flex flex-col sm:flex-row gap-3">
+      <div class="flex items-center border rounded-lg overflow-hidden bg-white">
+        <input id="searchInputStudent" type="text" placeholder="Cari mahasiswa (NIM, nama, kelas)..."
+          class="px-3 py-2 w-64 text-sm focus:outline-none" />
+        <span class="px-3 text-gray-400">🔍</span>
+      </div>
+
+      <select id="statusFilterStudent"
+        class="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#00b14f]">
+        <option value="Semua">Semua Status</option>
+        <option value="Aktif">Aktif</option>
+        <option value="Nonaktif">Nonaktif</option>
+      </select>
+
+      <button data-add-mahasiswa
+        class="bg-[#00b14f] hover:bg-[#009743] text-white px-4 py-2 rounded-lg text-sm font-medium shadow transition">
+        + Tambah Mahasiswa
+      </button>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table id="studentTable" class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="bg-emerald-50 text-gray-700">
+          <th class="p-3 text-left">NIM</th>
+          <th class="p-3 text-left">Nama</th>
+          <th class="p-3 text-left">Kelas</th>
+          <th class="p-3 text-left">Status</th>
+          <th class="p-3 text-center">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (students.length === 0) { %>
+          <tr><td colspan="5" class="p-4 text-center text-gray-500">Belum ada data mahasiswa.</td></tr>
+        <% } else { %>
+          <% students.forEach(s => { %>
+            <tr class="student-row border-b hover:bg-emerald-50 transition"
+                data-nim="<%= s.nim %>"
+                data-name="<%= s.name.toLowerCase() %>"
+                data-class="<%= s.class ? s.class.toLowerCase() : '' %>"
+                data-status="<%= s.status %>">
+              <td class="p-3"><%= s.nim %></td>
+              <td class="p-3"><%= s.name %></td>
+              <td class="p-3"><%= s.class %></td>
+              <td class="p-3"><%= s.status %></td>
+              <td class="p-3 flex justify-center gap-3">
+                <button data-edit-mahasiswa data-id="<%= s.id %>" data-nim="<%= s.nim %>"
+                  data-name="<%= s.name %>" data-kelas="<%= s.class %>" data-status="<%= s.status %>"
+                  class="text-amber-500 hover:underline">Edit</button>
+                <button data-reset-mahasiswa data-id="<%= s.id %>" class="text-blue-500 hover:underline">Reset</button>
+                <button data-delete-mahasiswa data-id="<%= s.id %>" class="text-red-500 hover:underline">Hapus</button>
+              </td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Tambah -->
+<div id="addStudentModal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+    <h3 class="text-lg font-semibold text-[#00b14f] mb-4">Tambah Mahasiswa Baru</h3>
+    <form method="POST" action="/dashboard/admin/student/add" class="space-y-3">
+      <input name="nim" placeholder="NIM" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input name="name" placeholder="Nama Mahasiswa" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input name="class" placeholder="Kelas" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <select name="status" class="w-full border rounded-lg px-3 py-2 text-sm">
+        <option value="Aktif">Aktif</option>
+        <option value="Nonaktif">Nonaktif</option>
+      </select>
+      <div class="flex justify-end gap-3 pt-3">
+        <button type="button" data-close-add-mahasiswa class="text-gray-500 hover:underline">Batal</button>
+        <button class="bg-[#00b14f] hover:bg-[#009743] text-white px-4 py-2 rounded-lg text-sm font-medium">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Edit -->
+<div id="editStudentModal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+    <h3 class="text-lg font-semibold text-[#00b14f] mb-4">Edit Mahasiswa</h3>
+    <form method="POST" action="/dashboard/admin/student/edit" class="space-y-3">
+      <input type="hidden" name="id" id="editStudentId" />
+      <input name="nim" id="editStudentNim" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input name="name" id="editStudentName" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input name="class" id="editStudentClass" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <select name="status" id="editStudentStatus" class="w-full border rounded-lg px-3 py-2 text-sm">
+        <option value="Aktif">Aktif</option>
+        <option value="Nonaktif">Nonaktif</option>
+      </select>
+      <div class="flex justify-end gap-3 pt-3">
+        <button type="button" data-close-edit-mahasiswa class="text-gray-500 hover:underline">Batal</button>
+        <button class="bg-[#00b14f] hover:bg-[#009743] text-white px-4 py-2 rounded-lg text-sm font-medium">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/js/admin/admin-mahasiswa.js"></script>

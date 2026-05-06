@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String    @id @default(uuid())
+  email            String    @unique
+  password         String
+  name             String
+  role             Role      @default(STUDENT)
+  createdAt        DateTime  @default(now())
+  lecturerId       String?   @unique
+  studentId        String?   @unique
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  lecturer         Lecturer? @relation("UserLecturer", fields: [lecturerId], references: [id])
+  student          Student?  @relation("UserStudent", fields: [studentId], references: [id])
+}
+
+model Lecturer {
+  id      String    @id @default(uuid())
+  nip     String    @unique
+  name    String
+  email   String    @unique
+  status  String    @default("Aktif")
+  Session Session[]
+  Subject Subject[]
+  user    User?     @relation("UserLecturer")
+}
+
+model Student {
+  id          String       @id @default(uuid())
+  nim         String       @unique
+  name        String
+  class       String
+  status      String       @default("Aktif")
+  attendances Attendance[]
+  user        User?        @relation("UserStudent")
+}
+
+model Subject {
+  id           String    @id @default(uuid())
+  code         String    @unique
+  name         String
+  lecturerNip  String
+  lecturerName String
+  sessions     Session[]
+  Lecturer     Lecturer  @relation(fields: [lecturerNip], references: [nip], onDelete: Cascade)
+}
+
+model Session {
+  id          String       @id @default(uuid())
+  subjectCode String
+  lecturerNip String
+  isActive    Boolean      @default(true)
+  status      String       @default("Aktif")
+  qrCode      String?
+  qrToken     String?
+  qrExpiresAt DateTime?
+  createdAt   DateTime     @default(now())
+  closedAt    DateTime?
+  attendances Attendance[]
+  Lecturer    Lecturer     @relation(fields: [lecturerNip], references: [nip], onDelete: Cascade)
+  subject     Subject      @relation(fields: [subjectCode], references: [code], onDelete: Cascade)
+}
+
+model Attendance {
+  id             String   @id @default(uuid())
+  studentNim     String
+  studentName    String
+  class          String
+  sessionId      String
+  subjectCode    String
+  subjectName    String
+  lecturerName   String
+  date           DateTime
+  attendanceTime DateTime @default(now())
+  status         String   @default("Hadir")
+  session        Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student        Student  @relation(fields: [studentNim], references: [nim], onDelete: Cascade)
+}
+
+model Setting {
+  id         String   @id @default(uuid())
+  systemName String   @default("Sistem Absensi QR UNIYAP")
+  systemLogo String   @default("/img/logo_kampus.png")
+  slogan     String   @default("Smart Attendance Solution")
+  darkMode   Boolean  @default(false)
+  updatedAt  DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  LECTURER
+  STUDENT
+}

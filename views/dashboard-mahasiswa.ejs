@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Mahasiswa</title>
+<link rel="stylesheet" href="/css/output.css" />
+
+<style>
+body { font-family: "Poppins", sans-serif; background: #f3faf5; }
+.card { background: #fff; border-radius: 14px; padding: 18px; box-shadow:0 4px 16px rgba(0,0,0,0.05); }
+.btn-green { background:#0ea44d; color:#fff; padding:12px; border-radius:10px; display:block; text-align:center; font-weight:600; transition:.2s; }
+.btn-green:hover { background:#0b8a40; }
+.badge { padding:3px 8px; border-radius:8px; font-size:11px; font-weight:600; }
+.badge-hadir { background:#e6f7ed; color:#0ea44d; }
+.badge-alpha { background:#fde8e8; color:#e53e3e; }
+</style>
+</head>
+
+<body class="p-5">
+
+<!-- Header -->
+<div class="flex justify-between items-center mb-6">
+  <div>
+    <h2 class="text-xl font-bold text-[#0ea44d]">👋 Halo, <%= student.name %></h2>
+    <p class="text-xs text-gray-500">NIM: <%= student.nim %></p>
+  </div>
+
+  <a href="/auth/logout" class="text-red-600 font-semibold hover:underline text-sm">
+    Logout
+  </a>
+</div>
+
+<!-- Card Info -->
+<div class="card mb-5">
+  <p class="text-sm text-gray-500 mb-1">Program Studi</p>
+  <p class="font-semibold mb-2"><%= student.class || "Tidak tersedia" %></p>
+
+  <p class="text-sm text-gray-500 mb-1">Nama</p>
+  <p class="font-semibold mb-2"><%= student.name %></p>
+
+  <p class="text-sm text-gray-500 mb-1">NIM</p>
+  <p class="font-semibold"><%= student.nim %></p>
+</div>
+
+<!-- Tombol Scan -->
+<a href="/scan" class="btn-green text-center mb-4">
+  📷 Scan QR untuk Absen
+</a>
+
+<!-- Riwayat -->
+<div class="card mb-5">
+  <h3 class="font-semibold mb-3">📅 Riwayat Kehadiran Terbaru</h3>
+
+  <% if (history && history.length > 0) { %>
+  <table class="w-full text-sm">
+    <tr class="text-gray-600 font-semibold border-b">
+      <th class="py-2 text-left">Tanggal</th>
+      <th class="py-2 text-left">Matkul</th>
+      <th class="py-2 text-left">Status</th>
+    </tr>
+
+    <% history.slice(0,5).forEach(h => { %>
+      <tr class="border-b text-sm">
+        <td class="py-2"><%= h.date.toISOString().split('T')[0] %></td>
+        <td class="py-2"><%= h.subjectName %></td>
+        <td class="py-2">
+          <% if(h.status === "Hadir"){ %>
+            <span class="badge badge-hadir">Hadir</span>
+          <% } else { %>
+            <span class="badge badge-alpha">Alpha</span>
+          <% } %>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+  <% } else { %>
+    <p class="text-gray-500 text-center text-sm italic">Belum ada data kehadiran</p>
+  <% } %>
+</div>
+
+<!-- Link riwayat lengkap -->
+<a href="/dashboard/mahasiswa/history" class="text-center block text-[#0ea44d] font-semibold underline">
+  Lihat Riwayat Lengkap →
+</a>
+
+</body>
+</html>

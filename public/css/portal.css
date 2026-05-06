@@ -1,0 +1,147 @@
+:root {
+  --primary: #00b14f; /* Hijau Grab terbaru */
+  --primary-dark: #009743;
+  --text-light: #ffffff;
+  --white: #ffffff;
+}
+
+/* 🌿 Background hijau solid elegan */
+.portal-bg {
+  background: radial-gradient(circle at top right, #00b14f 0%, #009743 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  color: var(--text-light);
+  overflow: hidden;
+  position: relative;
+}
+
+/* 💫 Lingkaran dekoratif samar di background */
+.portal-bg::before,
+.portal-bg::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  background: #ffffff;
+  z-index: 0;
+}
+
+.portal-bg::before {
+  width: 400px;
+  height: 400px;
+  top: -100px;
+  left: -150px;
+}
+
+.portal-bg::after {
+  width: 600px;
+  height: 600px;
+  bottom: -150px;
+  right: -200px;
+}
+
+/* 📦 Container utama */
+.portal-container {
+  text-align: center;
+  width: 100%;
+  max-width: 1000px;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* 🎓 Logo */
+.logo-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logo-img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 10px;
+}
+
+/* 🏷️ Judul dan subjudul */
+.portal-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--white);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.portal-subtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+/* 🧭 Roles sejajar horizontal */
+.roles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.8rem;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+}
+
+/* 🎯 Role Card mini elegan */
+.role-card {
+  background: var(--white);
+  color: #1f2937;
+  border-radius: 1rem;
+  padding: 0.9rem 1.5rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 1.05rem;
+  width: auto;
+}
+
+.role-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0, 177, 79, 0.3);
+}
+
+/* 🧍 Icon sejajar */
+.role-icon-inline {
+  font-size: 1.4rem;
+}
+
+/* 🧾 Footer */
+.portal-footer {
+  position: absolute;
+  bottom: 1.5rem;
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* 📱 Responsif */
+@media (max-width: 768px) {
+  .roles {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .role-card {
+    width: 80%;
+  }
+}

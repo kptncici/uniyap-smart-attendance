@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - Sistem Absensi QR UNIYAP</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/login.css" />
+
+  <style>
+    :root {
+      --primary: #00b14f;
+      --primary-dark: #009743;
+    }
+
+    body.login-bg {
+      background: linear-gradient(135deg, #e6f9ed, #c9f1d6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .login-box {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .login-title {
+      color: var(--primary);
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-field {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      padding: 0.7rem 0.9rem;
+      border-radius: 0.5rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-field:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 177, 79, 0.2);
+    }
+
+    .btn-login {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-login:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(0, 177, 79, 0.3);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(25px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body class="login-bg">
+  <div class="login-box">
+
+    <% 
+      const roleName = {
+        ADMIN: "Admin",
+        LECTURER: "Dosen",
+        STUDENT: "Mahasiswa"
+      }[role] || "Sistem Absensi QR UNIYAP"; 
+    %>
+
+    <h1 class="login-title">Login <%= roleName %></h1>
+
+    <% if (expired) { %>
+      <div class="bg-yellow-100 text-yellow-800 p-2 rounded text-sm text-center mb-3 shadow">
+        ⏰ Sesi Anda berakhir. Silakan login kembali.
+      </div>
+    <% } %>
+
+    <% if (error) { %>
+      <div class="bg-red-100 text-red-800 p-2 rounded text-sm text-center mb-3 shadow">
+        ⚠️ <%= error %>
+      </div>
+    <% } %>
+
+    <form method="POST" action="/auth/login" class="space-y-4">
+
+      <input type="hidden" name="role" value="<%= role %>" />
+
+      <div>
+        <label class="block text-sm text-gray-600 font-medium mb-1">Email</label>
+        <input 
+          name="email" 
+          type="email" 
+          required 
+          placeholder="Masukkan email anda"
+          class="input-field w-full block" 
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm text-gray-600 font-medium mb-1">Password</label>
+        <input 
+          name="password" 
+          type="password" 
+          required 
+          placeholder="Masukkan password"
+          class="input-field w-full block" 
+        />
+      </div>
+
+      <button type="submit" class="btn-login">Masuk</button>
+    </form>
+
+  </div>
+</body>
+</html>

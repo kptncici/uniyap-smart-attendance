@@ -1,0 +1,144 @@
+<div
+  class="rounded-xl p-6 shadow-sm transition"
+  style="background-color: <%= setting?.darkMode ? '#1e293b' : '#ffffff' %>;"
+>
+  <h2
+    class="text-xl font-semibold mb-4 flex items-center gap-2"
+    style="color: <%= setting?.darkMode ? '#4ade80' : '#00b14f' %>;"
+  >
+    🧠 Pengaturan Sistem Global
+  </h2>
+
+  <% if (typeof success !== "undefined") { %>
+  <div class="bg-emerald-50 text-emerald-700 p-3 rounded mb-4">
+    ✅ <%= success %>
+  </div>
+  <% } %>
+  <% if (typeof error !== "undefined") { %>
+  <div class="bg-red-50 text-red-700 p-3 rounded mb-4">❌ <%= error %></div>
+  <% } %>
+
+  <form
+    id="systemForm"
+    action="/dashboard/admin/settings/system/update"
+    method="POST"
+    enctype="multipart/form-data"
+    class="space-y-4"
+  >
+    <div>
+      <label class="block text-sm mb-1 text-gray-600">Nama Sistem</label>
+      <input
+        type="text"
+        name="systemName"
+        value="<%= setting?.systemName || 'Sistem Absensi QR UNIYAP' %>"
+        class="border rounded-lg w-full px-3 py-2 text-sm focus:ring-2 focus:ring-[#00b14f]"
+        required
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm mb-1 text-gray-600">Slogan</label>
+      <input
+        type="text"
+        name="slogan"
+        value="<%= setting?.slogan || 'Smart Attendance Solution' %>"
+        class="border rounded-lg w-full px-3 py-2 text-sm focus:ring-2 focus:ring-[#00b14f]"
+        required
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm mb-1 text-gray-600">Logo Sistem</label>
+      <input
+        type="file"
+        name="systemLogo"
+        accept="image/*"
+        class="w-full border p-2 rounded-lg text-sm"
+      />
+      <% if (setting?.systemLogo) { %>
+      <img
+        id="previewLogo"
+        src="<%= setting.systemLogo %>"
+        alt="Logo"
+        class="w-24 mt-2 rounded-lg border"
+      />
+      <% } %>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <input
+        type="checkbox"
+        name="darkMode"
+        id="darkMode"
+        <%= setting?.darkMode ? 'checked' : '' %>
+      />
+      <label for="darkMode" class="text-sm text-gray-600">Aktifkan Mode Gelap</label>
+    </div>
+
+    <div class="flex justify-end pt-4">
+      <button
+        type="submit"
+        id="saveBtn"
+        class="bg-[#00b14f] hover:bg-[#009743] text-white px-4 py-2 rounded-lg text-sm font-medium shadow transition"
+      >
+        💾 Simpan Pengaturan
+      </button>
+    </div>
+  </form>
+
+  <!-- Loading & notifikasi -->
+  <div
+    id="systemNotif"
+    class="fixed top-5 right-5 bg-[#00b14f] text-white px-4 py-2 rounded-lg shadow-md opacity-0 transition-all duration-500"
+  >
+    Pengaturan berhasil disimpan!
+  </div>
+
+  <script>
+    const form = document.getElementById("systemForm");
+    const notif = document.getElementById("systemNotif");
+    const saveBtn = document.getElementById("saveBtn");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      saveBtn.innerText = "⏳ Menyimpan...";
+      saveBtn.disabled = true;
+
+      const formData = new FormData(form);
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (res.ok) {
+          notif.style.opacity = "1";
+          notif.style.transform = "translateY(0)";
+          setTimeout(() => {
+            notif.style.opacity = "0";
+          }, 2500);
+        } else {
+          alert("❌ Gagal menyimpan pengaturan sistem.");
+        }
+      } catch (err) {
+        alert("Terjadi kesalahan jaringan: " + err.message);
+      } finally {
+        saveBtn.innerText = "💾 Simpan Pengaturan";
+        saveBtn.disabled = false;
+      }
+    });
+
+    // Preview logo langsung
+    document.querySelector('input[name="systemLogo"]').addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = document.getElementById("previewLogo");
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</div>

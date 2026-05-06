@@ -1,0 +1,109 @@
+<div class="bg-white rounded-xl p-6 shadow-sm">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+    <h2 class="text-xl font-semibold text-[#00b14f] flex items-center gap-2">🏫 Data Dosen</h2>
+
+    <div class="flex flex-col sm:flex-row gap-3">
+      <div class="flex items-center border rounded-lg overflow-hidden">
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Cari dosen (nama, NIP, email)..."
+          class="px-3 py-2 w-60 text-sm focus:outline-none"
+        />
+        <span class="px-3 text-gray-400">🔍</span>
+      </div>
+      <button
+        data-add-dosen
+        class="bg-[#00b14f] hover:bg-[#009743] text-white px-4 py-2 rounded-lg text-sm font-medium shadow transition">
+        + Tambah Dosen
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="overflow-x-auto">
+    <table id="lecturerTable" class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="bg-emerald-50 text-gray-700">
+          <th class="p-3 text-left">NIP</th>
+          <th class="p-3 text-left">Nama</th>
+          <th class="p-3 text-left">Email</th>
+          <th class="p-3 text-left">Status</th>
+          <th class="p-3 text-center">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (lecturers.length === 0) { %>
+          <tr><td colspan="5" class="p-4 text-center text-gray-500">Belum ada data dosen.</td></tr>
+        <% } else { %>
+          <% lecturers.forEach(l => { %>
+            <tr class="lecturer-row border-b hover:bg-emerald-50 transition"
+                data-nip="<%= l.nip %>"
+                data-name="<%= l.name.toLowerCase() %>"
+                data-email="<%= l.email.toLowerCase() %>"
+                data-status="<%= l.status %>">
+              <td class="p-3"><%= l.nip %></td>
+              <td class="p-3"><%= l.name %></td>
+              <td class="p-3"><%= l.email %></td>
+              <td class="p-3"><%= l.status || 'Aktif' %></td>
+              <td class="p-3 flex justify-center gap-3">
+                <button
+                  data-edit-dosen
+                  data-id="<%= l.id %>"
+                  data-nip="<%= l.nip %>"
+                  data-name="<%= l.name %>"
+                  data-email="<%= l.email %>"
+                  data-status="<%= l.status %>"
+                  class="text-amber-500 hover:underline">
+                  Edit
+                </button>
+                <button data-reset-dosen data-id="<%= l.id %>" class="text-blue-500 hover:underline">Reset</button>
+                <button data-delete-dosen data-id="<%= l.id %>" class="text-red-500 hover:underline">Hapus</button>
+              </td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Tambah -->
+<div id="addModal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+    <h3 class="text-lg font-semibold text-[#00b14f] mb-4">Tambah Dosen Baru</h3>
+    <form method="POST" action="/dashboard/admin/lecturer/add" class="space-y-3">
+      <input name="nip" placeholder="NIP" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input name="name" placeholder="Nama Dosen" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input type="email" name="email" placeholder="Email" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <div class="flex justify-end gap-3 pt-3">
+        <button type="button" data-close-add class="text-gray-500 hover:underline">Batal</button>
+        <button class="bg-[#00b14f] hover:bg-[#009743] text-white px-4 py-2 rounded-lg text-sm font-medium">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Edit -->
+<div id="editModal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+    <h3 class="text-lg font-semibold text-[#00b14f] mb-4">Edit Data Dosen</h3>
+    <form method="POST" action="/dashboard/admin/lecturer/edit" class="space-y-3">
+      <input type="hidden" name="id" id="editId" />
+      <input name="nip" id="editNip" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input name="name" id="editName" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input type="email" name="email" id="editEmail" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <select name="status" id="editStatus" class="w-full border rounded-lg px-3 py-2 text-sm">
+        <option value="Aktif">Aktif</option>
+        <option value="Nonaktif">Nonaktif</option>
+      </select>
+      <div class="flex justify-end gap-3 pt-3">
+        <button type="button" data-close-edit class="text-gray-500 hover:underline">Batal</button>
+        <button class="bg-[#00b14f] hover:bg-[#009743] text-white px-4 py-2 rounded-lg text-sm font-medium">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/js/admin/admin-dosen.js"></script>

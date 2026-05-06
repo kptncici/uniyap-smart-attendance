@@ -1,0 +1,52 @@
+/* 🌿 Warna khas UNIYAP */
+:root {
+  --primary: #00b14f;
+  --primary-dark: #009743;
+}
+
+/* Animasi lembut masuk */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Global dashboard style */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f9fafb;
+}
+
+/* Card shadow lebih lembut */
+.card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: fadeIn 0.5s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 177, 79, 0.2);
+}
+
+/* Tombol tab */
+.tab-btn {
+  background-color: var(--primary);
+  color: white;
+  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.tab-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* Footer style */
+footer {
+  margin-top: 3rem;
+  color: #6b7280;
+  text-align: center;
+}

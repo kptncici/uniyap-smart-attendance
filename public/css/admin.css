@@ -1,0 +1,17 @@
+/* admin.css - minimal styling for dashboard cards and modals */
+body { font-family: Inter, system-ui, sans-serif; }
+
+
+/* small helpers */
+.bg-emerald-50 { background-color: #ecfdf5; }
+.text-emerald-700 { color: #047857; }
+
+
+/* tables */
+.table { width:100%; border-collapse: collapse; }
+.table th, .table td { padding: 0.6rem; border: 1px solid #e5e7eb; }
+
+
+/* modal simple */
+.modal { position: fixed; inset:0; display:flex; align-items:center; justify-content:center; }
+.modal .panel { background:#fff;padding:1rem;border-radius:0.5rem; }

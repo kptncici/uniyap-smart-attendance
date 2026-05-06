@@ -1,0 +1,91 @@
+<div class="bg-white rounded-xl p-6 shadow-sm">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+    <h2 class="text-xl font-semibold text-[#00b14f] flex items-center gap-2">📘 Data Mata Kuliah</h2>
+
+    <div class="flex flex-col sm:flex-row gap-3">
+      <div class="flex items-center border rounded-lg overflow-hidden">
+        <input id="searchMatkul" type="text" placeholder="Cari mata kuliah atau dosen..."
+          class="px-3 py-2 w-60 text-sm focus:outline-none" />
+        <span class="px-3 text-gray-400">🔍</span>
+      </div>
+      <button data-add-matkul
+        class="bg-[#00b14f] hover:bg-[#009743] text-white px-4 py-2 rounded-lg text-sm font-medium shadow transition">
+        + Tambah Mata Kuliah
+      </button>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table id="matkulTable" class="w-full border-collapse text-sm">
+      <thead>
+        <tr class="bg-emerald-50 text-gray-700">
+          <th class="p-3 text-left">Kode</th>
+          <th class="p-3 text-left">Nama</th>
+          <th class="p-3 text-left">Dosen Pengampu</th>
+          <th class="p-3 text-left">NIP Dosen</th>
+          <th class="p-3 text-center">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (subjects.length === 0) { %>
+          <tr><td colspan="5" class="p-4 text-center text-gray-500">Belum ada data mata kuliah.</td></tr>
+        <% } else { %>
+          <% subjects.forEach(s => { %>
+            <tr class="matkul-row border-b hover:bg-emerald-50 transition"
+                data-name="<%= s.name.toLowerCase() %>"
+                data-lecturer="<%= s.lecturerName.toLowerCase() %>">
+              <td class="p-3"><%= s.code %></td>
+              <td class="p-3"><%= s.name %></td>
+              <td class="p-3"><%= s.lecturerName %></td>
+              <td class="p-3"><%= s.lecturerNip %></td>
+              <td class="p-3 text-center flex justify-center gap-3">
+                <button data-edit-matkul
+                  data-id="<%= s.id %>"
+                  data-code="<%= s.code %>"
+                  data-name="<%= s.name %>"
+                  data-nip="<%= s.lecturerNip %>"
+                  class="text-amber-500 hover:underline">Edit</button>
+                <button data-delete-matkul data-id="<%= s.id %>" class="text-red-500 hover:underline">Hapus</button>
+              </td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Tambah -->
+<div id="addModal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+    <h3 class="text-lg font-semibold text-[#00b14f] mb-4">Tambah Mata Kuliah</h3>
+    <form method="POST" action="/dashboard/admin/subject/add" class="space-y-3">
+      <input name="code" placeholder="Kode Mata Kuliah" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input name="name" placeholder="Nama Mata Kuliah" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input name="lecturerNip" placeholder="NIP Dosen Pengampu" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <div class="flex justify-end gap-3 pt-3">
+        <button type="button" data-close-add-matkul class="text-gray-500 hover:underline">Batal</button>
+        <button class="bg-[#00b14f] hover:bg-[#009743] text-white px-4 py-2 rounded-lg text-sm font-medium">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Edit -->
+<div id="editModal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+    <h3 class="text-lg font-semibold text-[#00b14f] mb-4">Edit Mata Kuliah</h3>
+    <form method="POST" action="/dashboard/admin/subject/edit" class="space-y-3">
+      <input type="hidden" name="id" id="editId" />
+      <input name="code" id="editCode" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input name="name" id="editName" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <input name="lecturerNip" id="editLecturerNip" required class="w-full border rounded-lg px-3 py-2 text-sm" />
+      <div class="flex justify-end gap-3 pt-3">
+        <button type="button" data-close-edit-matkul class="text-gray-500 hover:underline">Batal</button>
+        <button class="bg-[#00b14f] hover:bg-[#009743] text-white px-4 py-2 rounded-lg text-sm font-medium">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/js/admin/admin-matkul.js"></script>

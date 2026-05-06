@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Dosen</title>
+<link rel="stylesheet" href="/css/output.css" />
+
+<style>
+body { 
+  font-family: "Poppins", sans-serif;
+  background: #f6fbf7;
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar { 
+  width: 190px;
+  background: #e8f8ef;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 18px;
+  border-right: 1px solid #cfe9d9;
+}
+
+.sidebar a { 
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  margin-top: 10px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #0b4d2e;
+  transition: 0.2s;
+}
+
+.sidebar a:hover { background: #c8ebd8; }
+
+.sidebar .active {
+  background: #0ea44d;
+  color: white;
+}
+
+/* Logo */
+.logo img { 
+  width: 45px;
+  height: auto;
+  margin-bottom: 8px;
+  display: block;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.15));
+}
+
+/* Content */
+.content {
+  flex: 1;
+  margin-left: 190px;
+  padding: 20px;
+}
+
+/* Card */
+.card { 
+  background: white;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: 1px solid #eef5f0;
+}
+
+/* Buttons */
+.btn-green { 
+  background: #0ea44d;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  width: 100%;
+  transition: 0.2s;
+}
+.btn-green:hover { background: #0c8f44; }
+
+.btn-red {
+  background: #e6463c;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  width: 100%;
+}
+
+/* Badge Live */
+.badge-live { 
+  background: #0ea44d22;
+  color: #0ea44d;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- ====================== SIDEBAR ======================== -->
+<div class="sidebar">
+
+  <div class="logo mb-2">
+    <img src="<%= setting?.systemLogo || '/img/logo_kampus.png' %>" alt="Logo Sistem">
+  </div>
+
+  <h1 class="font-bold text-base text-[#084c2e] mb-3 leading-tight">
+    Absensi Dosen
+  </h1>
+
+  <a href="/dashboard/dosen" class="active">🏠 Dashboard</a>
+  <a href="/dashboard/dosen/report">📊 Laporan</a>
+  <a href="/auth/logout">🚪 Logout</a>
+
+</div>
+
+<!-- ====================== CONTENT ======================== -->
+<div class="content">
+
+  <!-- Welcome Section -->
+  <div class="card mb-5">
+    <p class="text-sm text-gray-500 mb-1">Selamat datang 👋</p>
+    <h2 class="text-lg font-semibold">Halo, <%= user.name %></h2>
+    <p class="text-xs text-gray-600">Semoga harimu produktif!</p>
+  </div>
+
+  <!-- Statistik -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="card text-center py-6">
+      <p class="text-sm text-gray-600">Mata Kuliah</p>
+      <h2 class="text-2xl font-bold"><%= courses.length %></h2>
+    </div>
+
+    <div class="card text-center py-6">
+      <p class="text-sm text-gray-600">Total Sesi</p>
+      <h2 class="text-2xl font-bold"><%= sessions.length %></h2>
+    </div>
+
+    <div class="card text-center py-6">
+      <p class="text-sm text-gray-600">Sesi Aktif</p>
+      <h2 class="text-2xl font-bold"><%= sessions.filter(s => s.isActive).length %></h2>
+    </div>
+  </div>
+
+  <!-- ====================== Sesi Aktif ======================== -->
+  <% const activeSession = sessions.find(s => s.isActive); %>
+
+  <% if (activeSession) { %>
+  <div class="card mb-6 border border-green-300">
+
+    <div class="flex justify-between mb-2">
+      <p class="font-semibold flex items-center gap-2 text-green-700">
+        🟢 Sesi Aktif <span class="badge-live">LIVE</span>
+      </p>
+      <p class="text-xs text-gray-500 font-medium"><%= activeSession.subjectCode %></p>
+    </div>
+
+    <h3 class="font-semibold mb-1 text-[#084c2e]">
+      <%= activeSession.subject.name %>
+    </h3>
+
+    <p class="text-xs mb-4 text-gray-500">Sesi sedang berlangsung</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+      <a href="/dashboard/dosen/session/qr/<%= activeSession.id %>"
+         class="btn-green flex items-center justify-center gap-2">
+        📱 QR Absensi
+      </a>
+
+      <form action="/dashboard/dosen/session/close" method="POST">
+        <input type="hidden" name="sessionId" value="<%= activeSession.id %>">
+        <button class="btn-red flex items-center justify-center gap-2">
+          ❌ Tutup Sesi
+        </button>
+      </form>
+
+    </div>
+
+  </div>
+  <% } %>
+
+  <!-- ====================== Daftar Mata Kuliah ======================== -->
+  <h2 class="font-semibold mb-2 text-[#084c2e]">Kelas Anda</h2>
+
+  <% courses.forEach(course => { %>
+  <div class="card mb-3">
+
+    <h3 class="font-semibold text-[#084c2e]"><%= course.name %></h3>
+    <p class="text-xs text-gray-500 mb-3">Kode: <%= course.code %></p>
+
+    <% if (activeSession && activeSession.subjectCode === course.code) { %>
+
+      <a href="/dashboard/dosen/session/qr/<%= activeSession.id %>"
+         class="btn-green mb-2 block text-center">
+        📱 Lihat QR
+      </a>
+
+    <% } else { %>
+
+      <form action="/dashboard/dosen/session/create" method="POST">
+        <input type="hidden" name="subjectCode" value="<%= course.code %>">
+        <button class="btn-green mb-2 w-full">
+          🚀 Mulai Sesi Absensi
+        </button>
+      </form>
+
+    <% } %>
+
+  </div>
+  <% }) %>
+
+</div>
+
+</body>
+</html>

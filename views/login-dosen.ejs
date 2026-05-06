@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Dosen - Sistem Absensi QR UNIYAP</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body class="login-bg flex items-center justify-center min-h-screen">
+  <div class="login-box bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+    <div class="text-center mb-6">
+      <img src="/img/logo.png" class="w-16 h-16 mx-auto mb-3" alt="Logo">
+      <h1 class="text-2xl font-bold text-green-700">Login Dosen</h1>
+      <p class="text-gray-500 text-sm">Gunakan Email atau NIP Anda untuk login</p>
+    </div>
+
+    <!-- ✅ FORM FIXED -->
+    <form id="loginForm" action="/auth/login" method="POST">
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2">Email / NIP</label>
+        <input
+          type="text"
+          name="email"
+          class="input-field border border-gray-300 rounded w-full px-3 py-2 focus:ring-2 focus:ring-green-500"
+          placeholder="contoh: salahudinrobo@gmail.com atau 0102030405"
+          required
+        >
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 mb-2">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="input-field border border-gray-300 rounded w-full px-3 py-2 focus:ring-2 focus:ring-green-500"
+          placeholder="Masukkan password Anda"
+          required
+        >
+      </div>
+
+      <button
+        type="submit"
+        class="btn-login w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg shadow transition">
+        Login Sekarang
+      </button>
+    </form>
+
+    <div class="text-center mt-6">
+      <a href="/" class="text-green-600 hover:underline">← Kembali ke Portal</a>
+    </div>
+  </div>
+
+  <script src="/js/login.js"></script>
+</body>
+</html>

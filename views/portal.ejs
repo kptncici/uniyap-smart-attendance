@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= systemName %> - Portal</title>
+    <link rel="stylesheet" href="/css/portal.css" />
+
+    <!-- Tambahkan style tambahan untuk dark mode -->
+    <style>
+      body.dark-mode {
+        background-color: #0f172a;
+        color: #f8fafc;
+      }
+      .portal-container {
+        transition: all 0.3s ease;
+      }
+      .portal-title {
+        transition: color 0.3s ease;
+      }
+      .portal-subtitle {
+        transition: color 0.3s ease;
+      }
+    </style>
+  </head>
+
+  <body class="portal-bg <%= darkMode ? 'dark-mode' : '' %>">
+    <div class="portal-container">
+      <div class="logo-box">
+
+        <!-- ✅ FIXED Fallback logo -->
+        <img
+          id="portalLogo"
+          src="<%= logoPath || '/img/logo_kampus.png' %>"
+          alt="Logo"
+          class="logo-img"
+        />
+
+        <h1 id="portalTitle" class="portal-title"><%= systemName %></h1>
+        <p id="portalSubtitle" class="portal-subtitle">
+          <%= slogan %> <br />
+          Selamat datang di sistem ini. Silakan pilih peran Anda untuk login.
+        </p>
+      </div>
+
+      <div class="roles">
+        <a href="/auth/login-admin" class="role-card">
+          <span class="role-icon-inline">👨‍💼</span>
+          <span>Login Admin</span>
+        </a>
+
+        <a href="/auth/login-dosen" class="role-card">
+          <span class="role-icon-inline">👨‍🏫</span>
+          <span>Login Dosen</span>
+        </a>
+
+        <a href="/auth/login-mahasiswa" class="role-card">
+          <span class="role-icon-inline">🎓</span>
+          <span>Login Mahasiswa</span>
+        </a>
+      </div>
+    </div>
+
+    <footer class="portal-footer">
+      © <%= year %> <%= systemName %> · Universitas Yapis Papua
+    </footer>
+
+    <!-- Socket.IO Client (Realtime Update Portal) -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      // Saat admin update sistem, portal langsung refresh kontennya
+      socket.on("settingUpdated", (data) => {
+        console.log("🔄 Pengaturan sistem diperbarui:", data);
+
+        // Update konten portal tanpa reload
+        document.title = data.systemName + " - Portal";
+
+        // ⬇️ Logo realtime fix
+        document.getElementById("portalLogo").src =
+          data.systemLogo || "/img/logo_kampus.png";
+
+        document.getElementById("portalTitle").innerText = data.systemName;
+
+        document.getElementById("portalSubtitle").innerText =
+          data.slogan +
+          "\nSelamat datang di sistem ini. Silakan pilih peran Anda untuk login.";
+
+        // Mode gelap otomatis
+        if (data.darkMode) {
+          document.body.classList.add("dark-mode");
+        } else {
+          document.body.classList.remove("dark-mode");
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Laporan Presensi</title>
+
+  <link rel="stylesheet" href="/css/output.css">
+
+  <style>
+    body{
+      font-family: "Poppins", sans-serif;
+      background: #f3faf5;
+    }
+
+    .card{
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+    }
+
+    .table-head{
+      background: #e6f7ed;
+    }
+
+    .btn-green{
+      background: #0ea44d;
+      color: white;
+      transition: .2s;
+    }
+
+    .btn-green:hover{
+      background: #0c8f44;
+    }
+
+    .badge{
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-success{
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .input{
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 10px 12px;
+      outline: none;
+      transition: .2s;
+    }
+
+    .input:focus{
+      border-color: #0ea44d;
+      box-shadow: 0 0 0 3px rgba(14,164,77,0.1);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="max-w-7xl mx-auto px-4 py-6">
+
+  <!-- HEADER -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+
+    <div>
+      <h1 class="text-3xl font-bold text-[#0ea44d] flex items-center gap-2">
+        📊 Laporan Presensi
+      </h1>
+
+      <p class="text-gray-500 mt-1">
+        <%= subject.name %> (<%= subject.code %>)
+      </p>
+    </div>
+
+    <a
+      href="/dashboard/dosen"
+      class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-xl text-sm font-medium w-fit"
+    >
+      ← Kembali
+    </a>
+
+  </div>
+
+  <!-- FILTER -->
+  <div class="card p-5 mb-6">
+
+    <form
+      action="/dashboard/dosen/report/<%= subject.id %>/export"
+      method="GET"
+      class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end"
+    >
+
+      <!-- START -->
+      <div>
+        <label class="text-sm font-medium text-gray-600 block mb-2">
+          Dari Tanggal
+        </label>
+
+        <input
+          type="date"
+          name="start"
+          value="<%= start || '' %>"
+          class="input w-full"
+        >
+      </div>
+
+      <!-- END -->
+      <div>
+        <label class="text-sm font-medium text-gray-600 block mb-2">
+          Sampai Tanggal
+        </label>
+
+        <input
+          type="date"
+          name="end"
+          value="<%= end || '' %>"
+          class="input w-full"
+        >
+      </div>
+
+      <!-- SEARCH -->
+      <div>
+        <button
+          type="submit"
+          formaction="/dashboard/dosen/report/<%= subject.id %>"
+          class="btn-green w-full py-3 rounded-xl font-semibold shadow"
+        >
+          🔍 Cari Data
+        </button>
+      </div>
+
+      <!-- EXPORT -->
+      <div>
+        <button
+          type="submit"
+          class="bg-emerald-600 hover:bg-emerald-700 text-white w-full py-3 rounded-xl font-semibold shadow transition"
+        >
+          📥 Export Excel
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+  <!-- TABLE -->
+  <div class="card overflow-hidden">
+
+    <div class="overflow-x-auto">
+
+      <table class="w-full text-sm">
+
+        <thead class="table-head">
+          <tr>
+
+            <th class="text-left p-4 font-semibold">
+              Nama Mahasiswa
+            </th>
+
+            <th class="text-left p-4 font-semibold">
+              NIM
+            </th>
+
+            <th class="text-left p-4 font-semibold">
+              Tanggal
+            </th>
+
+            <th class="text-left p-4 font-semibold">
+              Jam
+            </th>
+
+            <th class="text-left p-4 font-semibold">
+              Status
+            </th>
+
+          </tr>
+        </thead>
+
+        <tbody>
+
+        <% 
+          let total = 0;
+        %>
+
+        <% sessions.forEach(s => { %>
+
+          <% s.attendances.forEach(a => { %>
+
+            <% total++; %>
+
+            <tr class="border-b hover:bg-gray-50 transition">
+
+              <td class="p-4">
+                <%= a.studentName %>
+              </td>
+
+              <td class="p-4">
+                <%= a.studentNim %>
+              </td>
+
+              <td class="p-4">
+                <%= new Date(a.date).toLocaleDateString("id-ID") %>
+              </td>
+
+              <td class="p-4">
+                <%= a.attendanceTime
+                  ? new Date(a.attendanceTime).toLocaleTimeString("id-ID")
+                  : "-" %>
+              </td>
+
+              <td class="p-4">
+                <span class="badge badge-success">
+                  <%= a.status %>
+                </span>
+              </td>
+
+            </tr>
+
+          <% }) %>
+
+        <% }) %>
+
+        <% if(total === 0){ %>
+
+          <tr>
+            <td
+              colspan="5"
+              class="text-center p-10 text-gray-500 italic"
+            >
+              Belum ada data presensi
+            </td>
+          </tr>
+
+        <% } %>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

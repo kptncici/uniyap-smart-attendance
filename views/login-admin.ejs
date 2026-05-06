@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Login Admin - Sistem Absensi QR</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="/css/login.css">
+</head>
+<body class="portal-bg">
+<main class="portal-container">
+<div class="logo-box">
+<img src="/img/logo_kampus.png" alt="Logo" class="logo-img">
+<h1 class="portal-title">Sistem Absensi QR UNIYAP</h1>
+<p class="portal-subtitle">Selamat datang di sistem ini. Silakan login menggunakan akun admin.</p>
+</div>
+
+
+<div class="flex justify-center mt-6">
+<form action="/auth/login" method="POST" class="login-box" style="max-width:420px; width:100%">
+<% if (error) { %>
+<div class="bg-red-100 text-red-800 p-2 rounded text-sm mb-3"><%= error %></div>
+<% } %>
+<label class="block text-sm mb-1 font-medium text-gray-700">Email</label>
+<input name="email" type="email" required class="input-field mb-3" />
+
+
+<label class="block text-sm mb-1 font-medium text-gray-700">Password</label>
+<input name="password" type="password" required class="input-field mb-4" />
+
+
+<button type="submit" class="btn-login">Login</button>
+<div class="text-xs text-gray-500 text-center mt-3">Kembali ke <a href="/" class="underline">Portal</a></div>
+</form>
+</div>
+
+
+</main>
+</body>
+</html>

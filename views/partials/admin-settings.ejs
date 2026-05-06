@@ -1,0 +1,158 @@
+<div class="bg-white rounded-xl p-6 shadow-sm">
+  <h2 class="text-xl font-semibold text-[#00b14f] mb-4">⚙️ Pengaturan Admin & Sistem</h2>
+
+  <!-- ✅ NOTIFIKASI -->
+  <% if (typeof success !== "undefined") { %>
+    <div
+      class="bg-emerald-50 text-emerald-700 p-3 rounded mb-4 flex items-center gap-2 transition-all duration-500"
+      id="notif-success"
+    >
+      ✅ <%= decodeURIComponent(success) %>
+    </div>
+  <% } else if (typeof error !== "undefined") { %>
+    <div
+      class="bg-red-50 text-red-700 p-3 rounded mb-4 flex items-center gap-2 transition-all duration-500"
+      id="notif-error"
+    >
+      ❌ <%= decodeURIComponent(error) %>
+    </div>
+  <% } %>
+
+  <!-- 👤 FORM PENGATURAN AKUN ADMIN -->
+  <form action="/dashboard/admin/settings/update" method="POST" class="space-y-6 border-b pb-6">
+    <h3 class="text-lg font-medium text-gray-800 mb-3">👤 Data Akun Admin</h3>
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1">Nama Lengkap</label>
+      <input
+        type="text"
+        name="name"
+        value="<%= user.name %>"
+        required
+        class="border rounded-lg w-full px-3 py-2 text-sm focus:ring-2 focus:ring-[#00b14f] outline-none"
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1">Email</label>
+      <input
+        type="email"
+        name="email"
+        value="<%= user.email %>"
+        required
+        class="border rounded-lg w-full px-3 py-2 text-sm focus:ring-2 focus:ring-[#00b14f] outline-none"
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1">Password Baru</label>
+      <input
+        type="password"
+        name="password"
+        placeholder="Kosongkan jika tidak ingin diubah"
+        class="border rounded-lg w-full px-3 py-2 text-sm focus:ring-2 focus:ring-[#00b14f] outline-none"
+      />
+    </div>
+
+    <div class="flex justify-end pt-3">
+      <button
+        class="bg-[#00b14f] hover:bg-[#009743] text-white px-5 py-2 rounded-lg text-sm font-medium shadow transition-all duration-300"
+      >
+        💾 Simpan Akun
+      </button>
+    </div>
+  </form>
+
+  <!-- ⚙️ FORM PENGATURAN SISTEM -->
+  <form
+    action="/dashboard/admin/settings/system/update"
+    method="POST"
+    enctype="multipart/form-data"
+    class="space-y-6 mt-6"
+  >
+    <h3 class="text-lg font-medium text-gray-800 mb-3">🧠 Pengaturan Sistem</h3>
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1">Nama Sistem</label>
+      <input
+        type="text"
+        name="systemName"
+        value="<%= setting.systemName %>"
+        required
+        class="border rounded-lg w-full px-3 py-2 text-sm focus:ring-2 focus:ring-[#00b14f] outline-none"
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-1">Slogan Sistem</label>
+      <input
+        type="text"
+        name="slogan"
+        value="<%= setting.slogan || '' %>"
+        placeholder="Masukkan slogan sistem"
+        class="border rounded-lg w-full px-3 py-2 text-sm focus:ring-2 focus:ring-[#00b14f] outline-none"
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm text-gray-600 mb-2">Logo Sistem</label>
+      <div class="flex items-center gap-4">
+        <img
+          src="<%= setting.systemLogo || '/img/logo_kampus.png' %>"
+          alt="Logo Sistem"
+          id="logoPreview"
+          class="h-14 w-auto rounded border shadow-sm bg-gray-50"
+        />
+        <input
+          type="file"
+          name="systemLogo"
+          accept="image/*"
+          class="border text-sm px-2 py-1 rounded-lg focus:ring-2 focus:ring-[#00b14f]"
+          onchange="previewLogo(event)"
+        />
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 mt-3">
+      <input
+        type="checkbox"
+        id="darkMode"
+        name="darkMode"
+        <%= setting.darkMode ? "checked" : "" %>
+        class="h-4 w-4 text-[#00b14f] border-gray-300 rounded focus:ring-[#00b14f]"
+      />
+      <label for="darkMode" class="text-sm text-gray-700">Aktifkan Mode Gelap</label>
+    </div>
+
+    <div class="flex justify-end pt-4 border-t mt-5">
+      <button
+        class="bg-[#00b14f] hover:bg-[#009743] text-white px-5 py-2 rounded-lg text-sm font-medium shadow transition-all duration-300"
+      >
+        💾 Simpan Sistem
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- 🖼️ PREVIEW LOGO & NOTIF -->
+<script>
+  function previewLogo(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById("logoPreview");
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+    }
+  }
+
+  // Fade out notifikasi otomatis
+  setTimeout(() => {
+    const successBox = document.getElementById("notif-success");
+    const errorBox = document.getElementById("notif-error");
+    if (successBox) successBox.style.opacity = "0";
+    if (errorBox) errorBox.style.opacity = "0";
+    setTimeout(() => {
+      if (successBox) successBox.remove();
+      if (errorBox) errorBox.remove();
+    }, 500);
+  }, 3000);
+</script>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Absensi - <%= session.subject ? session.subject.name : "Mata Kuliah" %></title>
+  <link rel="stylesheet" href="/css/output.css">
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+<header class="bg-[#00b14f] text-white px-5 py-3 shadow flex justify-between items-center">
+  <h1 class="font-semibold text-lg">QR Absensi</h1>
+  <a href="/dashboard/dosen" class="bg-white text-[#00b14f] px-4 py-2 rounded shadow font-medium hover:bg-gray-100">
+    ⬅ Dashboard
+  </a>
+</header>
+
+<main class="flex flex-col items-center p-6 mt-4 w-full">
+
+  <% if (!session || session.status !== "Aktif") { %>
+    <div class="bg-white w-full max-w-2xl text-center p-10 rounded-xl shadow">
+      <h2 class="text-xl font-bold text-red-600 mb-3">Sesi Telah Ditutup</h2>
+      <a href="/dashboard/dosen" class="bg-[#00b14f] text-white px-5 py-2 rounded-lg shadow hover:bg-[#009c45]">
+        ⬅ Kembali ke Dashboard
+      </a>
+    </div>
+  <% } else { %>
+
+  <div class="bg-white w-full max-w-2xl text-center p-6 rounded-xl shadow">
+    <h2 class="text-xl font-bold mb-1"><%= session.subject ? session.subject.name : "-" %></h2>
+    <p class="text-sm text-gray-500 mb-3">Kode: <%= session.subject ? session.subject.code : "-" %></p>
+
+    <!-- ✅ QR IMAGE -->
+    <img id="qrImage" src="<%= session.qrCode %>" 
+         class="w-72 h-72 mx-auto bg-white p-3 rounded-lg shadow mb-3 border border-gray-200" />
+
+    <p class="text-xs text-gray-500">QR auto-refresh setiap 30 detik</p>
+    <p id="timer" class="text-xs text-gray-500 mb-4">Mengupdate QR dalam 30s...</p>
+
+    <!-- ✅ Tombol Tutup Sesi -->
+    <form action="/dashboard/dosen/session/close" method="POST">
+      <input type="hidden" name="sessionId" value="<%= session.id %>">
+      <button class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600">
+        🔴 Tutup Sesi
+      </button>
+    </form>
+  </div>
+
+  <script>
+    let time = 30;
+
+    function refreshQR() {
+      fetch(`/dashboard/dosen/session/qr-generate/<%= session.id %>`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.qr) {
+            document.getElementById("qrImage").src = data.qr;
+          }
+          time = 30;
+        });
+    }
+
+    setInterval(() => {
+      time--;
+      document.getElementById("timer").innerText = `Mengupdate QR dalam ${time}s...`;
+      if (time <= 0) refreshQR();
+    }, 1000);
+  </script>
+
+  <% } %>
+
+</main>
+
+</body>
+</html>

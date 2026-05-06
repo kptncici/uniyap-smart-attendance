@@ -1,0 +1,79 @@
+<div class="bg-white rounded-xl p-6 shadow-sm">
+  <h2 class="text-xl font-semibold text-[#00b14f] flex items-center gap-2 mb-4">
+    📊 Statistik Sistem Absensi QR
+  </h2>
+
+  <!-- Kartu Ringkasan -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="p-4 bg-emerald-50 rounded-lg text-center shadow">
+      <p class="text-sm text-gray-500">Total Dosen</p>
+      <p id="totalLecturers" class="text-2xl font-bold text-[#00b14f]">0</p>
+    </div>
+    <div class="p-4 bg-emerald-50 rounded-lg text-center shadow">
+      <p class="text-sm text-gray-500">Total Mahasiswa</p>
+      <p id="totalStudents" class="text-2xl font-bold text-[#00b14f]">0</p>
+    </div>
+    <div class="p-4 bg-emerald-50 rounded-lg text-center shadow">
+      <p class="text-sm text-gray-500">Total Mata Kuliah</p>
+      <p id="totalSubjects" class="text-2xl font-bold text-[#00b14f]">0</p>
+    </div>
+    <div class="p-4 bg-emerald-50 rounded-lg text-center shadow">
+      <p class="text-sm text-gray-500">Total Absensi</p>
+      <p id="totalAttendances" class="text-2xl font-bold text-[#00b14f]">0</p>
+    </div>
+  </div>
+
+  <!-- Grafik -->
+  <div class="bg-white border rounded-xl p-6 shadow-sm">
+    <h3 class="text-lg font-semibold text-[#00b14f] mb-3">
+      Tren Kehadiran 7 Hari Terakhir
+    </h3>
+    <canvas id="attendanceChart" height="100"></canvas>
+  </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  async function loadStats() {
+    try {
+      const res = await fetch("/dashboard/admin/stats/json");
+      const data = await res.json();
+
+      document.getElementById("totalLecturers").textContent = data.totals.totalLecturers;
+      document.getElementById("totalStudents").textContent = data.totals.totalStudents;
+      document.getElementById("totalSubjects").textContent = data.totals.totalSubjects;
+      document.getElementById("totalAttendances").textContent = data.totals.totalAttendances;
+
+      const ctx = document.getElementById("attendanceChart");
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: data.chartData.labels,
+          datasets: [{
+            label: "Jumlah Kehadiran",
+            data: data.chartData.values,
+            borderColor: "#00b14f",
+            backgroundColor: "rgba(0,177,79,0.1)",
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true,
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false } },
+            y: { beginAtZero: true },
+          },
+        },
+      });
+    } catch (err) {
+      console.error("❌ Gagal muat statistik:", err);
+    }
+  }
+
+  loadStats();
+</script>
