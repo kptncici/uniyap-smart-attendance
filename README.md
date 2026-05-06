@@ -1,8 +1,10 @@
 # 🎓 UNIYAP Smart Attendance
 Realtime QR Attendance System for Campus built using Express.js, Prisma ORM, Supabase PostgreSQL, Socket.IO, EJS, and TailwindCSS.
 
+
 ## 🌐 Live Demo
 🔗 https://uniyap-smart-attendance-production.up.railway.app
+
 
 # ✨ Features
 ✅ Multi Role Authentication
@@ -17,6 +19,7 @@ Realtime QR Attendance System for Campus built using Express.js, Prisma ORM, Sup
 ✅ Lecturer Dashboard
 ✅ Anti Proxy Attendance
 
+
 # 🛠 Tech Stack
 * Express.js
 * Prisma ORM
@@ -27,42 +30,67 @@ Realtime QR Attendance System for Campus built using Express.js, Prisma ORM, Sup
 * ExcelJS
 * JWT Authentication
 
+
 # 🖥️ Screenshots
-🏠 Landing Page
- 
 
-🔐 Admin Login
- 
+## 🏠 Landing Page
 
+![Landing Page](public/screenshots/landing-page.png)
 
+---
 
+## 🔐 Admin Login
 
+![Admin Login](public/screenshots/admin-login.png)
 
-📊 Admin Dashboard
- 
+---
 
-👨‍🏫 Lecturer Login
- 
+## 📊 Admin Dashboard
 
-👨‍🏫 Lecturer Dashboard
- 
+![Admin Dashboard](public/screenshots/admin-dashboard.png)
 
+---
 
-📱 QR Attendance Session
- 
-🎓 Student Login
- 
+## 👨‍🏫 Lecturer Login
 
-🎓 Student Dashboard
- 
+![Lecturer Login](public/screenshots/dosen-login.png)
 
-📷 QR Scanner
+---
+
+## 👨‍🏫 Lecturer Dashboard
+
+![Lecturer Dashboard](public/screenshots/dosen-dashboard.png)
+
+---
+
+## 📱 QR Attendance Session
+
+![QR Attendance](public/screenshots/qr-attendance.png)
+
+---
+
+## 🎓 Student Login
+
+![Student Login](public/screenshots/mahasiswa-login.png)
+
+---
+
+## 🎓 Student Dashboard
+
+![Student Dashboard](public/screenshots/mahasiswa-dashboard.png)
+
+---
+
+## 📷 QR Scanner
+
+![QR Scanner](public/screenshots/qr-scanner.png)
  
 
 # 🚀 Installation
 git clone https://github.com/kptncici/uniyap-smart-attendance.git
 cd uniyap-smart-attendance
 npm install
+
 
 # ⚙️ Environment Variables
 Create .env
@@ -71,8 +99,10 @@ JWT_SECRET=
 PORT=3000
 NODE_ENV=development
 
+
 # ▶️ Run Project
 npm run dev
+
 
 # 👨‍💻 Developer
 
