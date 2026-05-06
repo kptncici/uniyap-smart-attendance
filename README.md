@@ -6,18 +6,22 @@ Realtime QR Attendance System for Campus built using Express.js, Prisma ORM, Sup
 🔗 https://uniyap-smart-attendance-production.up.railway.app
 
 
-# ✨ Features
-✅ Multi Role Authentication
-✅ QR Code Attendance
-✅ Dynamic QR Generator
-✅ Realtime Attendance Monitoring
-✅ Student QR Scanner
-✅ Attendance Reports
-✅ Export Excel Reports
-✅ Dashboard Analytics
-✅ Admin Management System
-✅ Lecturer Dashboard
-✅ Anti Proxy Attendance
+
+## ✨ Features
+
+- ✅ Multi Role Authentication
+- ✅ QR Code Attendance
+- ✅ Dynamic QR Generator
+- ✅ Realtime Attendance Monitoring
+- ✅ Student QR Scanner
+- ✅ Attendance Reports
+- ✅ Export Excel Reports
+- ✅ Dashboard Analytics
+- ✅ Admin Management System
+- ✅ Lecturer Dashboard
+- ✅ Anti Proxy Attendance
+
+---
 
 
 # 🛠 Tech Stack
@@ -92,12 +96,16 @@ cd uniyap-smart-attendance
 npm install
 
 
-# ⚙️ Environment Variables
-Create .env
+## ⚙️ Environment Variables
+
+Create `.env` file:
+
+```env
 DATABASE_URL=
 JWT_SECRET=
 PORT=3000
 NODE_ENV=development
+```
 
 
 # ▶️ Run Project
