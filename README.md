@@ -1,11 +1,14 @@
 # 🎓 UNIYAP Smart Attendance
+
 Realtime QR Attendance System for Campus built using Express.js, Prisma ORM, Supabase PostgreSQL, Socket.IO, EJS, and TailwindCSS.
 
+---
 
 ## 🌐 Live Demo
+
 🔗 https://uniyap-smart-attendance-production.up.railway.app
 
-
+---
 
 ## ✨ Features
 
@@ -23,78 +26,86 @@ Realtime QR Attendance System for Campus built using Express.js, Prisma ORM, Sup
 
 ---
 
+## 🛠 Tech Stack
 
-# 🛠 Tech Stack
-* Express.js
-* Prisma ORM
-* Supabase PostgreSQL
-* Socket.IO
-* EJS
-* TailwindCSS
-* ExcelJS
-* JWT Authentication
+- Express.js
+- Prisma ORM
+- Supabase PostgreSQL
+- Socket.IO
+- EJS
+- TailwindCSS
+- ExcelJS
+- JWT Authentication
 
+---
 
-# 🖥️ Screenshots
+## 🖥️ Screenshots
 
-## 🏠 Landing Page
+### 🏠 Landing Page
 
 ![Landing Page](public/screenshots/landing-page.png)
 
 ---
 
-## 🔐 Admin Login
+### 🔐 Admin Login
 
 ![Admin Login](public/screenshots/admin-login.png)
 
 ---
 
-## 📊 Admin Dashboard
+### 📊 Admin Dashboard
 
 ![Admin Dashboard](public/screenshots/admin-dashboard.png)
 
 ---
 
-## 👨‍🏫 Lecturer Login
+### 👨‍🏫 Lecturer Login
 
 ![Lecturer Login](public/screenshots/dosen-login.png)
 
 ---
 
-## 👨‍🏫 Lecturer Dashboard
+### 👨‍🏫 Lecturer Dashboard
 
 ![Lecturer Dashboard](public/screenshots/dosen-dashboard.png)
 
 ---
 
-## 📱 QR Attendance Session
+### 📱 QR Attendance Session
 
 ![QR Attendance](public/screenshots/qr-attendance.png)
 
 ---
 
-## 🎓 Student Login
+### 🎓 Student Login
 
 ![Student Login](public/screenshots/mahasiswa-login.png)
 
 ---
 
-## 🎓 Student Dashboard
+### 🎓 Student Dashboard
 
 ![Student Dashboard](public/screenshots/mahasiswa-dashboard.png)
 
 ---
 
-## 📷 QR Scanner
+### 📷 QR Scanner
 
 ![QR Scanner](public/screenshots/qr-scanner.png)
- 
 
-# 🚀 Installation
+---
+
+## 🚀 Installation
+
+```bash
 git clone https://github.com/kptncici/uniyap-smart-attendance.git
-cd uniyap-smart-attendance
-npm install
 
+cd uniyap-smart-attendance
+
+npm install
+```
+
+---
 
 ## ⚙️ Environment Variables
 
@@ -107,11 +118,16 @@ PORT=3000
 NODE_ENV=development
 ```
 
+---
 
-# ▶️ Run Project
+## ▶️ Run Project
+
+```bash
 npm run dev
+```
 
+---
 
-# 👨‍💻 Developer
+## 👨‍💻 Developer
 
-Developed by NURFADILLA RHAMADANI
+Developed by **NURFADILLA RHAMADANI**
